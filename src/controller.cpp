@@ -10,7 +10,10 @@ void BaseController::ChangeDirection(Snake &snake, Snake::Direction input,
   return;
 }
 
-void DefaultController::HandleInput(bool &running, Snake &snake, SDL_Event &e) const {
+void DefaultController::HandleInput(bool &running, Snake &snake) const {
+// Poll SDL events
+    SDL_Event e;
+while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
         running = false;
     } else if (e.type == SDL_KEYDOWN) {
@@ -30,9 +33,13 @@ void DefaultController::HandleInput(bool &running, Snake &snake, SDL_Event &e) c
         }
     }
 }
+}
 
 
-void AlternativeController::HandleInput(bool &running, Snake &snake, SDL_Event &e) const {
+void AlternativeController::HandleInput(bool &running, Snake &snake) const {
+// Poll SDL events
+    SDL_Event e;
+while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
         running = false;
     } else if (e.type == SDL_KEYDOWN) {
@@ -51,5 +58,6 @@ void AlternativeController::HandleInput(bool &running, Snake &snake, SDL_Event &
                 break;
         }
     }
+}
 }
 

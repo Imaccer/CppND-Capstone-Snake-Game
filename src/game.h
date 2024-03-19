@@ -44,14 +44,14 @@ class Game {
 public:
     Game(std::size_t grid_width, std::size_t grid_height, std::size_t num_snakes);
     //void Run(std::unique_ptr<BaseController> controller,std::size_t snakeIndex, Renderer &renderer,  std::size_t target_frame_duration);
-    void Run(std::vector<std::unique_ptr<BaseController>> controllers, std::size_t snakeIndex, Renderer &renderer,  std::size_t target_frame_duration);
-    void Update(std::size_t snakeIndex);
+    void Run(std::vector<std::unique_ptr<BaseController>> controllers,  Renderer &renderer,  std::size_t target_frame_duration);
+    void Update();
     void PlaceFood();
-    int GetScore(std::size_t snakeIndex) const;
-    int GetSize(std::size_t snakeIndex) const;
+    int GetScore() const;
+    std::vector<int> GetSize() const;
 
 private:
-    Snake& GetSnake(std::size_t snakeIndex);
+    // Snake& GetSnake();
     std::mutex mutex;
 
     std::vector<Snake> snakes;
