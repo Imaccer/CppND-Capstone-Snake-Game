@@ -19,7 +19,7 @@ private:
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
   std::mutex render_mutex;
-  std::mutex title_mutex;
+  // std::mutex title_mutex;
 
   const std::size_t screen_width;
   const std::size_t screen_height;

@@ -9,6 +9,7 @@ Renderer::Renderer(const std::size_t screen_width,
     : screen_width(screen_width), screen_height(screen_height),
       grid_width(grid_width), grid_height(grid_height) {
   // Initialize SDL
+ 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cerr << "SDL could not initialize.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
@@ -33,6 +34,9 @@ Renderer::Renderer(const std::size_t screen_width,
 }
 
 Renderer::~Renderer() {
+  
+  SDL_DestroyRenderer(sdl_renderer);
+  SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
   SDL_Quit();
 }
@@ -76,7 +80,7 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
-  std::lock_guard<std::mutex> lock(title_mutex);
+  std::lock_guard<std::mutex> lock(render_mutex);
   std::string title{"Snake Score: " + std::to_string(score) +
                     " FPS: " + std::to_string(fps)};
   SDL_SetWindowTitle(sdl_window, title.c_str());
