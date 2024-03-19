@@ -46,6 +46,7 @@ public:
     //void Run(std::unique_ptr<BaseController> controller,std::size_t snakeIndex, Renderer &renderer,  std::size_t target_frame_duration);
     void Run(std::vector<std::unique_ptr<BaseController>> controllers,  Renderer &renderer,  std::size_t target_frame_duration);
     void Update();
+    void PollEvents();
     void PlaceFood();
     int GetScore() const;
     std::vector<int> GetSize() const;

@@ -56,6 +56,21 @@ Game::Game(std::size_t grid_width, std::size_t grid_height, std::size_t num_snak
 
 //void Game::Run(std::unique_ptr<BaseController> controller, std::size_t snakeIndex, Renderer &renderer,  std::size_t target_frame_duration) {
 
+
+ // Function to poll SDL events and push them onto the shared queue
+// void Game::PollEvents() {
+//     SDL_Event e;
+//     while (true) {
+//         if (SDL_PollEvent(&e)) {
+//             std::lock_guard<std::mutex> lock(eventMutex);
+//             eventQueue.push(e);
+//             eventCV.notify_all();
+//         }
+//         // Add a delay here if needed to prevent high CPU usage
+//         std::this_thread::sleep_for(std::chrono::milliseconds(10));
+//     }
+// }   
+
 void Game::Run(std::vector<std::unique_ptr<BaseController>> controllers, Renderer &renderer,  std::size_t target_frame_duration) {
     Uint32 title_timestamp = SDL_GetTicks();
     Uint32 frame_start;
@@ -70,8 +85,10 @@ void Game::Run(std::vector<std::unique_ptr<BaseController>> controllers, Rendere
 
     while (running) {
 
+         frame_start = SDL_GetTicks();
+
         inputThreads.clear();
-        renderThreads.clear();
+
         // Launch threads for each player's input handling
         inputThreads.emplace_back(std::thread(&BaseController::HandleInput, controllers[0].get(), std::ref(running), std::ref(snakes[0])));
         inputThreads.emplace_back(std::thread(&BaseController::HandleInput, controllers[1].get(), std::ref(running), std::ref(snakes[1])));
@@ -85,8 +102,6 @@ void Game::Run(std::vector<std::unique_ptr<BaseController>> controllers, Rendere
             thread.join();
         }
 
-
-        frame_start = SDL_GetTicks();
 
 
         // std::unique_lock<std::mutex> lock(mutex);
@@ -125,7 +140,7 @@ void Game::Run(std::vector<std::unique_ptr<BaseController>> controllers, Rendere
 
         // After every second, update the window title.
         if (frame_end - title_timestamp >= 1000) {
-            //renderer.UpdateWindowTitle(score, frame_count);
+            renderer.UpdateWindowTitle(score, frame_count);
             frame_count = 0;
             title_timestamp = frame_end;
         }

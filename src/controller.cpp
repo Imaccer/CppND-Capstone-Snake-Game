@@ -4,7 +4,8 @@
 #include <iostream>
 
 void BaseController::ChangeDirection(Snake &snake, Snake::Direction input,
-                                 Snake::Direction opposite) const {                                  
+                                 Snake::Direction opposite) const {  
+  std::lock_guard<std::mutex> lock(mutex_);                                
   if (snake.direction != opposite || snake.size == 1)
     snake.direction = input;
   return;
@@ -14,6 +15,7 @@ void DefaultController::HandleInput(bool &running, Snake &snake) const {
 // Poll SDL events
     SDL_Event e;
 while (SDL_PollEvent(&e)) {
+    std::cout << "default: "<< e.key.keysym.sym << '\n';
     if (e.type == SDL_QUIT) {
         running = false;
     } else if (e.type == SDL_KEYDOWN) {
@@ -40,6 +42,7 @@ void AlternativeController::HandleInput(bool &running, Snake &snake) const {
 // Poll SDL events
     SDL_Event e;
 while (SDL_PollEvent(&e)) {
+    std::cout << "alternative: "<< e.key.keysym.sym << '\n';
     if (e.type == SDL_QUIT) {
         running = false;
     } else if (e.type == SDL_KEYDOWN) {
@@ -60,4 +63,3 @@ while (SDL_PollEvent(&e)) {
     }
 }
 }
-

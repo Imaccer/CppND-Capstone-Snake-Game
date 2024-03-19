@@ -42,7 +42,7 @@ Renderer::~Renderer() {
 }
 
 void Renderer::Render(std::vector<Snake> const snakes, SDL_Point const &food) {
-  std::lock_guard<std::mutex> lock(render_mutex);
+  // std::lock_guard<std::mutex> lock(render_mutex);
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -83,7 +83,7 @@ for (int i = 0; i < snakes.size(); i++) {
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
-  std::lock_guard<std::mutex> lock(render_mutex);
+  // std::lock_guard<std::mutex> lock(render_mutex);
   std::string title{"Snake Score: " + std::to_string(score) +
                     " FPS: " + std::to_string(fps)};
   SDL_SetWindowTitle(sdl_window, title.c_str());

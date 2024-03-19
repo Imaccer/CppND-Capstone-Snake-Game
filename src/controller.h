@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include "snake.h"
+#include <mutex>
 
 class BaseController {
   public:
@@ -9,6 +10,7 @@ class BaseController {
   protected:
     void ChangeDirection(Snake &snake, Snake::Direction input,
                        Snake::Direction opposite) const;
+    mutable std::mutex mutex_;
 };
 
 class DefaultController : public BaseController {
@@ -21,5 +23,5 @@ public:
   void HandleInput(bool &running, Snake &snake) const override;
 };
 
-
 #endif
+
