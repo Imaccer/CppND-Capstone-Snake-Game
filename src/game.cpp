@@ -104,15 +104,17 @@ void Game::Run(std::vector<std::unique_ptr<BaseController>> controllers, Rendere
         // lock.unlock();
         // renderer.Render(snakes[snakeIndex], food); // Render the snake and food
         // Launch threads for each snakes render handling
-        for (int i = 0; i < snakes.size(); i++) {
-          renderThreads.emplace_back(std::thread(&Renderer::Render, std::ref(renderer), snakes[i], std::ref(food)));
-        }
+        // for (int i = 0; i < snakes.size(); i++) {
+        //   renderThreads.emplace_back(std::thread(&Renderer::Render, std::ref(renderer), snakes[i], std::ref(food)));
+        // }
+
+        renderer.Render(snakes, food);
         // inputThreads.emplace_back(std::thread(handleInputForPlayer, std::ref(player_2_controller), std::ref(running), std::ref(snake2)));
 
         // Join all the render threads
-        for (auto& thread : renderThreads) {
-            thread.join();
-        }
+        // for (auto& thread : renderThreads) {
+        //     thread.join();
+        // }
         
         frame_end = SDL_GetTicks();
 
