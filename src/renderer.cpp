@@ -2,14 +2,13 @@
 #include <iostream>
 #include <string>
 
-
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
                    const std::size_t grid_width, const std::size_t grid_height)
     : screen_width(screen_width), screen_height(screen_height),
       grid_width(grid_width), grid_height(grid_height) {
   // Initialize SDL
- 
+
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cerr << "SDL could not initialize.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
@@ -34,7 +33,7 @@ Renderer::Renderer(const std::size_t screen_width,
 }
 
 Renderer::~Renderer() {
-  
+
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyRenderer(sdl_renderer);
   SDL_DestroyWindow(sdl_window);
@@ -42,7 +41,6 @@ Renderer::~Renderer() {
 }
 
 void Renderer::Render(std::vector<Snake> const snakes, SDL_Point const &food) {
-  // std::lock_guard<std::mutex> lock(render_mutex);
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -57,33 +55,31 @@ void Renderer::Render(std::vector<Snake> const snakes, SDL_Point const &food) {
   block.y = food.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
 
-for (int i = 0; i < snakes.size(); i++) {
-  // Render snake's body
-  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-  for (SDL_Point const &point : snakes[i].body) {
-    block.x = point.x * block.w;
-    block.y = point.y * block.h;
+  for (int i = 0; i < snakes.size(); i++) {
+    // Render snake's body
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    for (SDL_Point const &point : snakes[i].body) {
+      block.x = point.x * block.w;
+      block.y = point.y * block.h;
+      SDL_RenderFillRect(sdl_renderer, &block);
+    }
+
+    // Render snake's head
+    block.x = static_cast<int>(snakes[i].head_x) * block.w;
+    block.y = static_cast<int>(snakes[i].head_y) * block.h;
+    if (snakes[i].alive) {
+      SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
+    } else {
+      SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
+    }
     SDL_RenderFillRect(sdl_renderer, &block);
   }
-
-  // Render snake's head
-  block.x = static_cast<int>(snakes[i].head_x) * block.w;
-  block.y = static_cast<int>(snakes[i].head_y) * block.h;
-  if (snakes[i].alive) {
-    SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
-  } else {
-    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
-  }
-  SDL_RenderFillRect(sdl_renderer, &block);
-
-}
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
-  // std::lock_guard<std::mutex> lock(render_mutex);
   std::string title{"Snake Score: " + std::to_string(score) +
                     " FPS: " + std::to_string(fps)};
   SDL_SetWindowTitle(sdl_window, title.c_str());

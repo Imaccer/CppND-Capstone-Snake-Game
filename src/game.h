@@ -9,8 +9,8 @@
 
 // class Game {
 // public:
-//   Game(std::size_t grid_width, std::size_t grid_height, std::size_t num_snakes);
-//   void Run(BaseController const &controller, Renderer &renderer,
+//   Game(std::size_t grid_width, std::size_t grid_height, std::size_t
+//   num_snakes); void Run(BaseController const &controller, Renderer &renderer,
 //            std::size_t target_frame_duration);
 //   int GetScore() const;
 //   int GetSize() const;
@@ -35,46 +35,43 @@
 #include "controller.h"
 #include "renderer.h"
 #include "snake.h"
-#include <vector>
-#include <random>
+#include <condition_variable>
+#include <deque>
 #include <memory>
 #include <mutex>
-#include <deque>
-#include <condition_variable>
+#include <random>
+#include <vector>
 
 class Game {
 public:
-    Game(std::size_t grid_width, std::size_t grid_height, std::size_t num_snakes);
-    // ~Game();
-    //void Run(std::unique_ptr<BaseController> controller,std::size_t snakeIndex, Renderer &renderer,  std::size_t target_frame_duration);
-    void Run(std::vector<std::unique_ptr<BaseController>> controllers,  Renderer &renderer,  std::size_t target_frame_duration);
-    void Update();
-    void PlaceFood();
-    int GetScore() const;
-    std::vector<int> GetSize() const;
-    std::string test;
-    std::deque<SDL_Event> eventQueue;
-    std::mutex eventMutex;
-    std::condition_variable eventCV;
-    bool running = true;
-    mutable std::mutex processedMutex;
-    std::condition_variable processedCV;
-    std::size_t processedCount = 0;
-    private:
-    // Snake& GetSnake();
-    std::mutex mutex;
-    
+  Game(std::size_t grid_width, std::size_t grid_height, std::size_t num_snakes);
+  void Run(std::vector<std::unique_ptr<BaseController>> controllers,
+           Renderer &renderer, std::size_t target_frame_duration);
+  void Update();
+  void PlaceFood();
+  int GetScore() const;
+  std::vector<int> GetSize() const;
+  std::string test;
+  std::deque<SDL_Event> eventQueue;
+  std::mutex eventMutex;
+  std::condition_variable eventCV;
+  bool running = true;
+  mutable std::mutex processedMutex;
+  std::condition_variable processedCV;
+  std::size_t processedCount = 0;
 
-    std::vector<Snake> snakes;
-    SDL_Point food;
-    std::random_device dev;
-    std::mt19937 engine;
-    std::uniform_int_distribution<int> random_w;
-    std::uniform_int_distribution<int> random_h;
-    int score{0};
+private:
+  std::mutex mutex;
 
-    void PollEvents();
+  std::vector<Snake> snakes;
+  SDL_Point food;
+  std::random_device dev;
+  std::mt19937 engine;
+  std::uniform_int_distribution<int> random_w;
+  std::uniform_int_distribution<int> random_h;
+  int score{0};
+
+  void PollEvents();
 };
 
 #endif
-
