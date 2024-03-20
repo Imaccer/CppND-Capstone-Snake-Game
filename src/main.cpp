@@ -6,7 +6,7 @@
 #include <iostream>
 
 int main() {
-  constexpr std::size_t kNumThreads{2}; // Number of snakes
+  const std::size_t kNumThreads{2}; // Number of snakes
   constexpr std::size_t kFramesPerSecond{60};
   constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
   constexpr std::size_t kScreenWidth{640};

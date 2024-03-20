@@ -5,7 +5,7 @@
 
 Game::Game(std::size_t grid_width, std::size_t grid_height,
            std::size_t num_snakes)
-    : engine(dev()), test("hello"),
+    : engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
   for (std::size_t i = 0; i < num_snakes; ++i) {
