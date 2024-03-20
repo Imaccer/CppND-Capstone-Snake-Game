@@ -57,7 +57,10 @@ public:
     std::mutex eventMutex;
     std::condition_variable eventCV;
     bool running = true;
-private:
+    mutable std::mutex processedMutex;
+    std::condition_variable processedCV;
+    std::size_t processedCount = 0;
+    private:
     // Snake& GetSnake();
     std::mutex mutex;
     

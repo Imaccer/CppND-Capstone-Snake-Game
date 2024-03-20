@@ -170,6 +170,8 @@ void Game::Run(std::vector<std::unique_ptr<BaseController>> controllers, Rendere
         // Clear the event queue at the beginning of each frame
         // SDL_FlushEvent(SDL_KEYDOWN); // Clear keydown events
         // eventQueue.clear();
+
+        // processedCount = 0;
     
 
         
@@ -179,7 +181,8 @@ void Game::Run(std::vector<std::unique_ptr<BaseController>> controllers, Rendere
         Update();
 
         renderer.Render(snakes, food);
-
+        
+        eventQueue.clear();
 
 
         // inputThreads.clear();
@@ -205,12 +208,13 @@ void Game::Run(std::vector<std::unique_ptr<BaseController>> controllers, Rendere
             SDL_Delay(target_frame_duration - frame_duration);
         }
 
-    //    // Wait until both controllers have processed the event before popping it from the queue
-    //     std::unique_lock<std::mutex> lock(processedMutex);
-    //     processedCV.wait(lock, [&] { return processedCount == controllers.size(); });
-    //     game.eventQueue.pop_front();
-    //     processedCount = 0; // Reset processed count for the next event
-
+        if (!eventQueue.empty()) {
+        // Wait until both controllers have processed the event before popping it from the queue
+            std::unique_lock<std::mutex> lock(processedMutex);
+            processedCV.wait(lock, [&] { return processedCount >= controllers.size(); });
+            eventQueue.pop_front();
+            processedCount = 0; // Reset processed count for the next event
+        }
         
     }
        eventThread.join();

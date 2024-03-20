@@ -19,9 +19,9 @@ void DefaultController::HandleInput(bool &running, Snake &snake) const {
             std::unique_lock<std::mutex> lock(game.eventMutex);
             game.eventCV.wait(lock, [&] { return !game.eventQueue.empty(); });
             e = game.eventQueue.front();
-            if (e.type != SDL_QUIT) {
-            game.eventQueue.pop_front();
-            }
+            // if (e.type != SDL_QUIT) {
+            // game.eventQueue.pop_front();
+            // }
         }
 
         // Handle SDL event
@@ -51,7 +51,15 @@ void DefaultController::HandleInput(bool &running, Snake &snake) const {
                 // return;
                 // Handle other key events as needed
             }
+                        // Notify that this controller has finished processing the event
+        {
+            std::lock_guard<std::mutex> lock(game.processedMutex);
+            game.processedCount++;
+            game.processedCV.notify_one();
+            // break;
         }
+        }
+
     }
 }
 
@@ -64,9 +72,9 @@ void AlternativeController::HandleInput(bool &running, Snake &snake) const {
             std::unique_lock<std::mutex> lock(game.eventMutex);
             game.eventCV.wait(lock, [&] { return !game.eventQueue.empty(); });
             e = game.eventQueue.front();
-            if (e.type != SDL_QUIT) {
-            game.eventQueue.pop_front();
-            }
+            // if (e.type != SDL_QUIT) {
+            // game.eventQueue.pop_front();
+            // }
         }
 
         // Handle SDL event
@@ -93,7 +101,15 @@ void AlternativeController::HandleInput(bool &running, Snake &snake) const {
                 ChangeDirection(snake, Snake::Direction::kRight, Snake::Direction::kLeft);
                 break;
             }
+            // Notify that this controller has finished processing the event
+        {
+            std::lock_guard<std::mutex> lock(game.processedMutex);
+            game.processedCount++;
+            game.processedCV.notify_one();
+            // break;
+        }  
         }
+  
     }
 }
 
