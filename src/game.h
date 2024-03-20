@@ -39,21 +39,28 @@
 #include <random>
 #include <memory>
 #include <mutex>
+#include <deque>
+#include <condition_variable>
 
 class Game {
 public:
     Game(std::size_t grid_width, std::size_t grid_height, std::size_t num_snakes);
+    // ~Game();
     //void Run(std::unique_ptr<BaseController> controller,std::size_t snakeIndex, Renderer &renderer,  std::size_t target_frame_duration);
     void Run(std::vector<std::unique_ptr<BaseController>> controllers,  Renderer &renderer,  std::size_t target_frame_duration);
     void Update();
-    void PollEvents();
     void PlaceFood();
     int GetScore() const;
     std::vector<int> GetSize() const;
-
+    std::string test;
+    std::deque<SDL_Event> eventQueue;
+    std::mutex eventMutex;
+    std::condition_variable eventCV;
+    bool running = true;
 private:
     // Snake& GetSnake();
     std::mutex mutex;
+    
 
     std::vector<Snake> snakes;
     SDL_Point food;
@@ -62,6 +69,8 @@ private:
     std::uniform_int_distribution<int> random_w;
     std::uniform_int_distribution<int> random_h;
     int score{0};
+
+    void PollEvents();
 };
 
 #endif

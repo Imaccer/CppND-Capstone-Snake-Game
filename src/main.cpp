@@ -17,11 +17,13 @@ int main() {
     
     Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
 
-    std::vector<std::unique_ptr<BaseController>> controllers;
-    controllers.emplace_back(std::make_unique<DefaultController>());
-    controllers.emplace_back(std::make_unique<AlternativeController>());
-
     Game game(kGridWidth, kGridHeight, kNumThreads);
+
+    std::vector<std::unique_ptr<BaseController>> controllers;
+    controllers.emplace_back(std::make_unique<DefaultController>(game));
+    controllers.emplace_back(std::make_unique<AlternativeController>(game));
+
+    // Game game(kGridWidth, kGridHeight, kNumThreads);
 
     // std::vector<std::future<void>> futures;
     game.Run(std::move(controllers), renderer, kMsPerFrame);
