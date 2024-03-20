@@ -65,8 +65,10 @@ void Renderer::Render(std::vector<Snake> const snakes, SDL_Point const &food) {
     }
 
     // Render snake's head
-    block.x = static_cast<int>(snakes[i].head_x) * block.w;
-    block.y = static_cast<int>(snakes[i].head_y) * block.h;
+    // block.x = static_cast<int>(snakes[i].head_x) * block.w;
+    // block.y = static_cast<int>(snakes[i].head_y) * block.h;
+    block.x = static_cast<int>(snakes[i].getHead_x()) * block.w;
+    block.y = static_cast<int>(snakes[i].getHead_y()) * block.h;
     if (snakes[i].alive) {
       SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
     } else {

@@ -22,13 +22,19 @@ public:
   float speed{0.1f};
   int size{1};
   bool alive{true};
-  float head_x;
-  float head_y;
+  // float head_x;
+  // float head_y;
   std::vector<SDL_Point> body;
+
+  float getHead_x() const {return head_x;}
+  float getHead_y() const {return head_y;}
 
 private:
   void UpdateHead();
   void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
+
+  float head_x;
+  float head_y;
 
   bool growing{false};
   int grid_width;
